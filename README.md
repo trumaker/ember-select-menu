@@ -1,6 +1,20 @@
-# Ember-select-menu
+# ember-cli {{select-menu}}
 
-This README outlines the details of collaborating on this Ember addon.
+A simplified interface for custom select widgets. The handlebars is straightforward and easy to read:
+
+```handlebars
+<label for="country">Where are you from?</label>
+{{#select-menu id="country" prompt="Select a country"}}
+  {{#each countries}}
+    {{#select-menu-option model=this search-by="name code" name=name code=code}}
+      {{this}}
+    {{/select-menu-option}}
+  {{/each}}
+{{/select-menu}}
+```
+
+This addon comes with baked in WAI-ARIA support for screen readers, keyboard navigation and keybord search.
+
 
 ## Installation
 

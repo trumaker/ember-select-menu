@@ -1,0 +1,82 @@
+html, body {
+  margin: 20px;
+}
+
+.select-menu_label {
+  position: relative;
+  display: block;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: pointer;
+
+  color: #333;
+  background-color: #F2F2F2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  height: 40px;
+  padding: 0 30px 0 10px;
+  line-height: 42px;
+  outline: none;
+}
+
+.select-menu_label.is-prompting {
+  color: #999;
+}
+
+.select-menu_label:hover,
+.select-menu_label.hover,
+.select-menu_label:focus {
+  color: #333;
+  background-color: #D9D9D9;
+  text-decoration: none;
+}
+
+.select-menu_label:active,
+.select-menu_label.active {
+  color: #FFF;
+  background-color: #333;
+  text-decoration: none;
+}
+
+.select-menu_list {
+  padding: 20px;
+  list-style: none;
+  margin: 0;
+
+  overflow: auto;
+  max-height: 250px;
+}
+
+.select-menu-option {
+  position: relative;
+  -webkit-font-smoothing: subpixel-antialiased;
+  user-select: none;
+  cursor: pointer;
+
+  padding: 8px 30px 8px 8px;
+  border-bottom: 1px solid #484848;
+  white-space: nowrap;
+  color: #999;
+}
+
+.select-menu-option:last-child {
+  border-bottom: 0;
+}
+
+.select-menu-option.selected,
+.select-menu-option:hover {
+  color: #FFF;
+  text-decoration: none;
+}
+
+.select-menu {
+  font-size: 14px;
+  outline: none;
+}
+
+.select-menu-option span {
+  padding-left: 30px;
+}

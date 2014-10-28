@@ -1,0 +1,6 @@
+{{view "select-menu-label"}}
+{{#popup-menu flow="dropdown" on="click hold" for=label}}
+  {{#view "select-menu-list"}}
+    {{yield}}
+  {{/view}}
+{{/popup-menu}}
