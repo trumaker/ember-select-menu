@@ -13,7 +13,7 @@ A simplified interface for custom select widgets. The handlebars is straightforw
 {{/select-menu}}
 ```
 
-This addon comes with baked in WAI-ARIA support for screen readers, keyboard navigation and keybord search.
+This addon comes with baked in WAI-ARIA support for screen readers, keyboard navigation and keyboard search.
 
 
 ## Installation
