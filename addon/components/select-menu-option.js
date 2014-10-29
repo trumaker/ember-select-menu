@@ -28,10 +28,12 @@ var SelectMenuOption = Ember.Component.extend({
   }.property(),
 
   searchStrings: function () {
+    var model = get(this, 'model');
+    if (!model) { return []; }
     return get(this, 'searchBy').map(function (key) {
-      return get(this, key);
+      return get(model, key);
     }, this);
-  }.property(),
+  }.property('model'),
 
   searchByWillChange: function () {
     get(this, 'searchBy').forEach(function (property) {
