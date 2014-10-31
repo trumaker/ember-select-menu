@@ -76,6 +76,8 @@ var SelectMenu = Ember.Component.extend({
 
   prompt: null,
 
+  label: nearestChild('select-menu-label'),
+  list: nearestChild('select-menu-list'),
   popup: nearestChild('popup-menu'),
 
   /**
