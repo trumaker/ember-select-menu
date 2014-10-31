@@ -1,9 +1,7 @@
 <label for="favorite-cookie">What's your favorite cookie?</label>
-{{#select-menu id="favorite-cookie" value=favoriteCookie prompt=prompt disabled=disabled}}
+{{#select-menu id="favorite-cookie" value=favoriteCookie prompt=prompt disabled=isDisabled}}
   {{#each this}}
-    {{#select-menu-option id=id value=this}}
-      {{name}}
-    {{/select-menu-option}}
+    {{select-option label=name id=id value=this disabled=disabled}}
   {{/each}}
 {{/select-menu}}
 

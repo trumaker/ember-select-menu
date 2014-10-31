@@ -33,7 +33,7 @@ test("the select-menu label has the correct attributes", function () {
 
 test("the select-menu label has the correct attributes when disabled", function () {
   expect(1);
-  visit("/?disabled=true");
+  visit("/?disabled");
   andThen(function () {
     var label = find("#favorite-cookie");
     equal(label.attr('aria-disabled'), "true");
@@ -61,7 +61,7 @@ test("the select-menu list has the correct attributes", function () {
 
 test("the select-menu list has the correct attributes when disabled", function () {
   expect(5);
-  visit("/?disabled=true&prompt=COOKIE");
+  visit("/?disabled&prompt=COOKIE");
   andThen(function () {
     var list = find("ul");
     equal(list.attr('role'), "listbox");
@@ -73,28 +73,42 @@ test("the select-menu list has the correct attributes when disabled", function (
 });
 
 
-test("the select-menu option has the correct attributes", function () {
-  expect(8);
+test("the select-option has the correct attributes", function () {
+  expect(10);
   visit("/");
   andThen(function () {
     var chocolateChip = find("#choc-chip");
     equal(chocolateChip.attr('role'), "option");
     equal(chocolateChip.attr('aria-selected'), "true");
+    equal(chocolateChip.attr('aria-disabled'), "false");
+    equal(chocolateChip.attr('aria-label'), "Chocolate Chip");
 
     var peanutButter = find("#pb");
     equal(peanutButter.attr('role'), "option");
     equal(peanutButter.attr('aria-selected'), "false");
+    equal(chocolateChip.attr('aria-disabled'), "false");
+    equal(peanutButter.attr('aria-label'), "Peanut Butter");
   });
 
   click("#favorite-cookie");
   click("#pb");
   andThen(function () {
     var chocolateChip = find("#choc-chip");
-    equal(chocolateChip.attr('role'), "option");
     equal(chocolateChip.attr('aria-selected'), "false");
 
     var peanutButter = find("#pb");
-    equal(peanutButter.attr('role'), "option");
     equal(peanutButter.attr('aria-selected'), "true");
+  });
+});
+
+test("the select-option will be marked as disabled if it is", function () {
+  expect(2);
+  visit("/?disabled=pb");
+  andThen(function () {
+    var chocolateChip = find("#choc-chip");
+    equal(chocolateChip.attr('aria-disabled'), "false");
+
+    var peanutButter = find("#pb");
+    equal(peanutButter.attr('aria-disabled'), "true");
   });
 });

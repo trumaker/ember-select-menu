@@ -6,17 +6,19 @@ var get = Ember.get;
 var set = Ember.set;
 var alias = Ember.computed.alias;
 
-var SelectMenuOption = Ember.Component.extend({
+var SelectOption = Ember.Component.extend({
 
   tagName: 'li',
-  classNames: ['select-menu-option'],
+  classNames: ['select-option'],
   classNameBindings: ['selected', 'disabled'],
-  attributeBindings: ['aria-selected'],
+  attributeBindings: ['aria-selected', 'aria-disabled', 'aria-label'],
 
   ariaRole: 'option',
   "aria-selected": stringify("selected"),
   "aria-disabled": stringify("disabled"),
+  "aria-label": alias("label"),
 
+  label: null,
   disabled: false,
 
   menu: nearestParent("select-menu"),
@@ -47,4 +49,4 @@ var SelectMenuOption = Ember.Component.extend({
 
 });
 
-export default SelectMenuOption;
+export default SelectOption;

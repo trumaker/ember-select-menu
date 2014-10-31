@@ -58,7 +58,7 @@ test("with prompt", function () {
 
 test("disabled", function () {
   expect(2);
-  visit("/?disabled=true");
+  visit("/?disabled");
   click("#favorite-cookie");
   andThen(function () {
     var label = find("#favorite-cookie");
