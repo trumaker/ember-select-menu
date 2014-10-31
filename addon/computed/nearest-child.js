@@ -1,12 +1,13 @@
 import Ember from "ember";
 
 var computed = Ember.computed;
+var bind = Ember.run.bind;
 var get = Ember.get;
 
 var flatten = function (array) {
   return array.reduce(function (a, b) {
     return a.concat(b);
-  });
+  }, []);
 };
 
 var recursivelyFindByType = function (typeClass, children) {
@@ -26,10 +27,29 @@ var recursivelyFindByType = function (typeClass, children) {
 };
 
 export default function(type) {
-  return computed('childViews.[]', function nearestChild() {
+  var tracking = Ember.Map.create();
+  return computed('childViews.[]', function nearestChild(key) {
     var typeClass = this.container.lookupFactory('component:' + type) ||
                     this.container.lookupFactory('view:' + type);
 
-    return recursivelyFindByType(typeClass, get(this, 'childViews') || []);
+    var children = get(this, 'childViews') || [];
+    var appendedChildren = children.filterBy('_state', 'inDOM');
+    var detachedChildren = children.filter(function (child) {
+      return ['inBuffer', 'hasElement', 'preRender'].indexOf(child._state) !== -1;
+    });
+
+    appendedChildren.forEach(function (child) {
+      tracking.delete(child);
+    });
+
+    var notifyChildrenChanged = bind(this, 'notifyPropertyChange', key);
+    detachedChildren.forEach(function (child) {
+      if (!tracking.has(child)) {
+        child.one('didInsertElement', this, notifyChildrenChanged);
+        tracking.set(child, true);
+      }
+    });
+
+    return recursivelyFindByType(typeClass, appendedChildren);
   });
 }
