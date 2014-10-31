@@ -3,12 +3,19 @@ import Ember from "ember";
 export default Ember.Route.extend({
 
   model: function () {
-    return [
-      "Chocolate Chip",
-      "Digestive",
-      "Oatmeal Raisin",
-      "Peanut Butter"
-    ];
+    return [{
+      id: "choc-chip",
+      name: "Chocolate Chip"
+    }, {
+      id: "digestive",
+      name: "Digestive"
+    }, {
+      id: "oatmeal",
+      name: "Oatmeal Raisin"
+    }, {
+      id: "pb",
+      name: "Peanut Butter"
+    }];
   }
 
 });

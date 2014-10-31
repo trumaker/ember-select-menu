@@ -120,7 +120,7 @@ var SelectMenu = Ember.Component.extend({
     if (!hasPrompt && get(this, 'selection') == null) {
       this.notifyPropertyChange('selection');
     }
-  }.observes('options.[]').on('init'),
+  }.observes('options.[]', 'prompt').on('init'),
 
   /** @private
     Attach events to labels that having a matching for attribute to this

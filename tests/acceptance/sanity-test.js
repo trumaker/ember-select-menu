@@ -13,20 +13,21 @@ module("Acceptance", {
 });
 
 test("no prompt", function () {
+  expect(3);
   visit("/");
   andThen(function () {
     equal(find("#favorite").html(), "Chocolate Chip");
   });
 
   click("#favorite-cookie");
-  click("li:contains('Digestive')");
+  click("#digestive");
 
   andThen(function () {
     equal(find("#favorite").html(), "Digestive");
   });
 
   click("#favorite-cookie");
-  click("li:contains('Peanut Butter')");
+  click("#pb");
 
   andThen(function () {
     equal(find("#favorite").html(), "Peanut Butter");
@@ -34,20 +35,21 @@ test("no prompt", function () {
 });
 
 test("with prompt", function () {
+  expect(3);
   visit("/?prompt=Pick a cookie");
   andThen(function () {
     equal(find("#favorite").html(), "");
   });
 
   click("#favorite-cookie");
-  click("li:contains('Digestive')");
+  click("#digestive");
 
   andThen(function () {
     equal(find("#favorite").html(), "Digestive");
   });
 
   click("#favorite-cookie");
-  click("li:contains('Peanut Butter')");
+  click("#pb");
 
   andThen(function () {
     equal(find("#favorite").html(), "Peanut Butter");
