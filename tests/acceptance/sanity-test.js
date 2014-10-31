@@ -76,3 +76,13 @@ test("not disabled", function () {
     ok(!label.hasClass('disabled'));
   });
 });
+
+test("clicking on the label will open the menu", function () {
+  expect(1);
+  visit("/");
+  click("label[for='favorite-cookie']");
+  andThen(function () {
+    var label = find("#favorite-cookie");
+    equal(label.attr('aria-expanded'), "true");
+  });
+});

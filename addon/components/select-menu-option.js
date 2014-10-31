@@ -5,51 +5,19 @@ import stringify from "../computed/stringify";
 var get = Ember.get;
 var set = Ember.set;
 var alias = Ember.computed.alias;
-var w = Ember.String.w;
-
-var addObserver = Ember.addObserver;
-var removeObserver = Ember.removeObserver;
-var propertyDidChange = Ember.propertyDidChange;
 
 var SelectMenuOption = Ember.Component.extend({
 
   tagName: 'li',
   classNames: ['select-menu-option'],
-  classNameBindings: ['isSelected:selected'],
+  classNameBindings: ['selected', 'disabled'],
   attributeBindings: ['aria-selected'],
 
   ariaRole: 'option',
-  "aria-selected": stringify("isSelected"),
+  "aria-selected": stringify("selected"),
+  "aria-disabled": stringify("disabled"),
 
-  "search-by": alias('searchBy'),
-  searchBy: function (key, value) {
-    return w(value || '');
-  }.property(),
-
-  searchStrings: function () {
-    var model = get(this, 'model');
-    if (!model) { return []; }
-    return get(this, 'searchBy').map(function (key) {
-      return get(model, key);
-    }, this);
-  }.property('model'),
-
-  searchByWillChange: function () {
-    get(this, 'searchBy').forEach(function (property) {
-      removeObserver(this, property, 'searchStringsDidChange');
-    }, this);
-  }.observesBefore('searchBy'),
-
-  searchByDidChange: function () {
-    get(this, 'searchBy').forEach(function (property) {
-      addObserver(this, property, 'searchStringsDidChange');
-    }, this);
-    this.notifyPropertyChange('searchStrings');
-  }.observes('searchBy').on('init'),
-
-  searchStringsDidChange: function () {
-    propertyDidChange(this, 'searchStrings');
-  },
+  disabled: false,
 
   menu: nearestParent("select-menu"),
   popup: nearestParent("popup-menu"),
@@ -63,15 +31,17 @@ var SelectMenuOption = Ember.Component.extend({
   }.on('willDestroyElement'),
 
   activeDescendant: alias("menu.activeDescendant"),
-  selection: alias("menu.selection"),
+  selection: alias("menu.value"),
 
-  isSelected: function () {
-    return get(this, 'selection') === get(this, 'model');
-  }.property('selection', 'model'),
+  selected: function () {
+    return get(this, 'selection') === get(this, 'value');
+  }.property('selection', 'value'),
 
   click: function () {
+    if (get(this, 'disabled')) { return; }
+
     set(this, 'activeDescendant', this);
-    set(this, 'selection', get(this, 'model'));
+    set(this, 'selection', get(this, 'value'));
     set(this, 'popup.isActive', false);
   }
 

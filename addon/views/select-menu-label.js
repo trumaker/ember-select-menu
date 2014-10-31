@@ -38,14 +38,6 @@ var SelectMenuLabel = Ember.View.extend({
 
   tabindex: 0,
 
-  mouseEnter: function () {
-    set(this, 'isHovering', true);
-  },
-
-  mouseLeave: function () {
-    set(this, 'isHovering', false);
-  },
-
   blur: function () {
     set(this, 'isHovering', false);
   },

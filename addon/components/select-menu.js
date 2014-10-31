@@ -1,6 +1,7 @@
 import Ember from "ember";
 import SelectMenuLabel from "../views/select-menu-label";
 import nearestChild from "../computed/nearest-child";
+import w from "../computed/w";
 
 var get = Ember.get;
 var next = Ember.run.next;
@@ -68,7 +69,9 @@ var SelectMenu = Ember.Component.extend({
     return [];
   }.property(),
 
-  activeDescendants: filterBy('options', 'isSelected'),
+  activeOptions: filterBy('options', 'disabled', false),
+
+  activeDescendants: filterBy('options', 'selected'),
   activeDescendant: reads('activeDescendants.firstObject'),
 
   searchString: null,
@@ -83,44 +86,43 @@ var SelectMenu = Ember.Component.extend({
   /**
     The item of the content that is currently selected.
 
-    If the {{select-menu}} has a prompt, then the selection
-    will by default be null. Otherwise, the selection will
+    If the {{select-menu}} has a prompt, then the value
+    will by default be null. Otherwise, the value will
     be the first item in the content.
 
-    @property selection
+    @property value
     @type Object
     @default null
    */
-  selection: function (key, value) {
+  value: function (key, value) {
     var hasPrompt = !!get(this, 'prompt');
-    var selection = value;
 
     if (hasPrompt) {
-      if (selection && selection.then) {
+      if (value && value.then) {
         var menu = this;
-        RSVP.Promise.cast(selection).then(function (selection) {
+        RSVP.Promise.cast(value).then(function (unwrappedValue) {
           if (menu.isDestroyed) { return; }
-          set(menu, 'selection', selection);
+          set(menu, 'value', unwrappedValue);
         });
       }
-    } else if (selection == null) {
+    } else if (value == null) {
       next(this, function () {
         if (this.isDestroyed || get(this, 'prompt')) { return; }
-        var firstOption = get(this, 'options.firstObject.model');
+        var firstOption = get(this, 'options.firstObject.value');
         if (firstOption) {
-          set(this, 'selection', firstOption);
+          set(this, 'value', firstOption);
         }
       });
     }
 
-    return selection;
+    return value;
   }.property(),
 
 
   _shouldShowPrompt: function () {
     var hasPrompt = !!get(this, 'prompt');
-    if (!hasPrompt && get(this, 'selection') == null) {
-      this.notifyPropertyChange('selection');
+    if (!hasPrompt && get(this, 'value') == null) {
+      this.notifyPropertyChange('value');
     }
   }.observes('options.[]', 'prompt').on('init'),
 
@@ -129,10 +131,11 @@ var SelectMenu = Ember.Component.extend({
     select menu.
    */
   didInsertElement: function () {
-    var selector = "label[for='%@']".fmt(get(this, 'label.elementId'));
+    var label = get(this, 'label');
+    var selector = "label[for='%@']".fmt(get(label, 'elementId'));
 
-    $(document).on('mouseenter', selector, bind(this, 'mouseEnterLabel'));
-    $(document).on('mouseleave', selector, bind(this, 'mouseLeaveLabel'));
+    $(document).on('mouseenter', selector, bind(label, 'set', 'isHovering', true));
+    $(document).on('mouseleave', selector, bind(label, 'set', 'isHovering', false));
   },
 
   /** @private
@@ -142,14 +145,6 @@ var SelectMenu = Ember.Component.extend({
     var selector = "label[for='%@']".fmt(get(this, 'label.elementId'));
     $(document).off('mouseenter', selector);
     $(document).off('mouseleave', selector);
-  },
-
-  mouseEnterLabel: function (evt) {
-    get(this, 'label').trigger('mouseEnter', evt);
-  },
-
-  mouseLeaveLabel: function (evt) {
-    get(this, 'label').trigger('mouseLeave', evt);
   },
 
   /**
@@ -245,7 +240,7 @@ var SelectMenu = Ember.Component.extend({
     Selects the next item in the option list.
    */
   selectNext: function () {
-    var options = get(this, 'options');
+    var options = get(this, 'activeOptions');
     var activeDescendant = get(this, 'activeDescendant');
     var index;
 
@@ -259,7 +254,7 @@ var SelectMenu = Ember.Component.extend({
       var option = options.objectAt(Math.min(index + 1, get(options, 'length') - 1));
       if (option !== activeDescendant) {
         set(this, 'activeDescendant', option);
-        set(this, 'selection', get(option, 'model'));
+        set(this, 'value', get(option, 'value'));
       }
     }
   },
@@ -268,7 +263,7 @@ var SelectMenu = Ember.Component.extend({
     Selects the previous item in the option list.
    */
   selectPrevious: function () {
-    var options = get(this, 'options');
+    var options = get(this, 'activeOptions');
     var activeDescendant = get(this, 'activeDescendant');
     var index;
 
@@ -282,14 +277,20 @@ var SelectMenu = Ember.Component.extend({
       var option = options.objectAt(Math.max(index - 1, 0));
       if (option !== activeDescendant) {
         set(this, 'activeDescendant', option);
-        set(this, 'selection', get(option, 'model'));
+        set(this, 'value', get(option, 'value'));
       }
     }
   },
 
   /**
+    Search by value of the object
+   */
+  "search-by": alias('searchBy'),
+  searchBy: w("this"),
+
+  /**
     Locally iterate through options and find the
-    best match. After 500 milliseconds of inactivity,
+    best match. After 750 milliseconds of inactivity,
     the search is reset, allowing users to search again.
    */
   searchStringDidChange: function () {
@@ -297,10 +298,11 @@ var SelectMenu = Ember.Component.extend({
       cancel(this.__timer);
     }
 
-    var options = get(this, 'options');
+    var options = get(this, 'activeOptions');
     var search = get(this, 'searchString');
+    var searchBy = get(this, 'searchBy');
 
-    if (options && search) {
+    if (options && search && searchBy) {
       var length = get(options, 'length'),
           match = null,
           start,
@@ -316,15 +318,21 @@ var SelectMenu = Ember.Component.extend({
         start = 0;
       }
 
-      var searcher = function (string) {
-        return String(string || '').toUpperCase().indexOf(search) === 0;
+      var hasMatch = function (value) {
+        for (var i = 0; i < searchBy.length; i++) {
+          var searchValue = (searchBy[i] === 'this') ? value : get(value, searchBy[i]);
+          if (String(searchValue || '').toUpperCase().indexOf(search) === 0) {
+            return true;
+          }
+        }
+        return false;
       };
 
-      // Search from the current selection
+      // Search from the current value
       // for the next match
       for (var i = start; i < length; i++) {
         var option = options.objectAt(i);
-        match = get(option, 'searchStrings').find(searcher);
+        match = hasMatch(get(option, 'value'));
 
         // Break on the first match,
         // if a user would like to match
@@ -342,7 +350,7 @@ var SelectMenu = Ember.Component.extend({
       // index on consective searches
       if (match != null) {
         set(this, 'activeDescendant', match);
-        set(this, 'selection', get(match, 'model'));
+        set(this, 'value', get(match, 'value'));
         this.__matchIndex = matchIndex;
       }
     }
