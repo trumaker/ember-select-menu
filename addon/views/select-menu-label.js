@@ -24,7 +24,8 @@ var SelectMenuLabel = Ember.View.extend({
 
   classNameBindings: ['isPrompting:is-prompting',
                       'menu.isActive:active',
-                      'isHovering:hover'],
+                      'isHovering:hover',
+                      'menu.disabled:disabled'],
 
   menu: nearestParent("select-menu"),
   prompt: reads('menu.prompt'),

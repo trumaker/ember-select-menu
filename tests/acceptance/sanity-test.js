@@ -55,3 +55,24 @@ test("with prompt", function () {
     equal(find("#favorite").html(), "Peanut Butter");
   });
 });
+
+test("disabled", function () {
+  expect(2);
+  visit("/?disabled=true");
+  click("#favorite-cookie");
+  andThen(function () {
+    var label = find("#favorite-cookie");
+    ok(label.hasClass('disabled'));
+    equal(label.attr('aria-expanded'), "false");
+  });
+});
+
+test("not disabled", function () {
+  expect(1);
+  visit("/");
+  click("#favorite-cookie");
+  andThen(function () {
+    var label = find("#favorite-cookie");
+    ok(!label.hasClass('disabled'));
+  });
+});
