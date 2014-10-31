@@ -1,3 +1,10 @@
-<h2 id='title'>Welcome to Ember.js</h2>
+<label for="favorite-cookie">What's your favorite cookie?</label>
+{{#select-menu id="favorite-cookie" selection=favoriteCookie prompt=prompt}}
+  {{#each this}}
+    {{#select-menu-option model=this}}
+      {{this}}
+    {{/select-menu-option}}
+  {{/each}}
+{{/select-menu}}
 
-{{outlet}}
+<div id="favorite">{{favoriteCookie}}</div>

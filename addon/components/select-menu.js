@@ -103,8 +103,8 @@ var SelectMenu = Ember.Component.extend({
       }
     } else if (selection == null) {
       next(this, function () {
-        if (this.isDestroyed) { return; }
-        var firstOption = get(this, 'options.firstObject.value');
+        if (this.isDestroyed || get(this, 'prompt')) { return; }
+        var firstOption = get(this, 'options.firstObject.model');
         if (firstOption) {
           set(this, 'selection', firstOption);
         }
