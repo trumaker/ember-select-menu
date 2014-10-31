@@ -3,24 +3,14 @@ import nearestParent from "../computed/nearest-parent";
 import stringify from "../computed/stringify";
 import ScrollSandbox from "../mixins/scroll_sandbox";
 
-var set = Ember.set;
 var reads = Ember.computed.reads;
 var not = Ember.computed.not;
 
-var SelectList = Ember.View.extend(ScrollSandbox, {
+var SelectMenuList = Ember.View.extend(ScrollSandbox, {
 
   tagName: 'ul',
 
   classNames: ['select-menu_list'],
-
-  attributeBindings: ['aria-hidden',
-                      'aria-labelledby',
-                      'aria-disabled',
-                      'aria-activedescendant'],
-
-  registerView: function () {
-    set(this, 'menu.list', this);
-  }.on('didInsertElement'),
 
   menu: nearestParent("select-menu"),
   popup: nearestParent("popup-menu"),
@@ -31,6 +21,11 @@ var SelectList = Ember.View.extend(ScrollSandbox, {
   // WAI ARIA attributes
   //
 
+  attributeBindings: ['aria-hidden',
+                      'aria-labelledby',
+                      'aria-disabled',
+                      'aria-activedescendant'],
+
   ariaRole: 'listbox',
   "aria-hidden": stringify("isHidden"),
   "aria-labelledby": reads('menu.label.elementId'),
@@ -39,4 +34,4 @@ var SelectList = Ember.View.extend(ScrollSandbox, {
 
 });
 
-export default SelectList;
+export default SelectMenuList;
