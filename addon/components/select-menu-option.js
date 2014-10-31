@@ -1,5 +1,6 @@
 import Ember from "ember";
 import nearestParent from "../computed/nearest-parent";
+import stringify from "../computed/stringify";
 
 var get = Ember.get;
 var set = Ember.set;
@@ -18,9 +19,7 @@ var SelectMenuOption = Ember.Component.extend({
   attributeBindings: ['aria-selected'],
 
   ariaRole: 'option',
-  "aria-selected": function () {
-    return String(get(this, 'isSelected'));
-  }.property('isSelected'),
+  "aria-selected": stringify("isSelected"),
 
   "search-by": alias('searchBy'),
   searchBy: function (key, value) {
