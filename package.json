@@ -1,6 +1,6 @@
 {
   "name": "ember-select-menu",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -27,9 +27,11 @@
     "ember-cli-qunit": "0.1.0",
     "ember-data": "1.0.0-beta.10",
     "ember-export-application-global": "^1.0.0",
-    "ember-popup-menu": "0.0.23",
     "express": "^4.8.5",
     "glob": "^4.0.5"
+  },
+  "dependencies": {
+    "ember-popup-menu": "0.0.23"
   },
   "keywords": [
     "ember-addon"
