@@ -3,7 +3,9 @@ import startApp from "../helpers/start-app";
 
 var App;
 
-module("Acceptance - <label>", {
+['?blockStyle', ''].forEach(function (qp) {
+
+module("Acceptance - <label>" + qp, {
   setup: function () {
     App = startApp();
   },
@@ -14,7 +16,7 @@ module("Acceptance - <label>", {
 
 test("clicking on the label will open the menu", function () {
   expect(1);
-  visit("/");
+  visit("/" + qp);
   click("label[for='favorite-cookie']");
   andThen(function () {
     var label = find("#favorite-cookie");
@@ -24,7 +26,7 @@ test("clicking on the label will open the menu", function () {
 
 test("hovering over the label will trigger a hover class on the select-menu label", function () {
   expect(2);
-  visit("/");
+  visit("/" + qp);
   triggerEvent("label[for='favorite-cookie']", "mouseenter");
   andThen(function () {
     var label = find("#favorite-cookie");
@@ -36,4 +38,6 @@ test("hovering over the label will trigger a hover class on the select-menu labe
     var label = find("#favorite-cookie");
     ok(!label.hasClass('hover'));
   });
+});
+
 });

@@ -3,7 +3,9 @@ import startApp from "../helpers/start-app";
 
 var App;
 
-module("Acceptance", {
+['?blockStyle', ''].forEach(function (qp) {
+
+module("Acceptance - sanity" + qp, {
   setup: function () {
     App = startApp();
   },
@@ -14,7 +16,7 @@ module("Acceptance", {
 
 test("no prompt", function () {
   expect(3);
-  visit("/");
+  visit("/" + qp);
   andThen(function () {
     equal(find("#favorite").html(), "Chocolate Chip");
   });
@@ -36,7 +38,7 @@ test("no prompt", function () {
 
 test("with prompt", function () {
   expect(3);
-  visit("/?prompt=Pick a cookie");
+  visit("/?prompt=Pick a cookie" + qp.replace('?', '&'));
   andThen(function () {
     equal(find("#favorite").html(), "");
   });
@@ -58,7 +60,7 @@ test("with prompt", function () {
 
 test("disabled", function () {
   expect(2);
-  visit("/?disabled");
+  visit("/?disabled" + qp.replace('?', '&'));
   click("#favorite-cookie");
   andThen(function () {
     var label = find("#favorite-cookie");
@@ -69,10 +71,12 @@ test("disabled", function () {
 
 test("not disabled", function () {
   expect(1);
-  visit("/");
+  visit("/" + qp);
   click("#favorite-cookie");
   andThen(function () {
     var label = find("#favorite-cookie");
     ok(!label.hasClass('disabled'));
   });
+});
+
 });

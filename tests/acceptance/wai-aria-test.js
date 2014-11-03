@@ -3,7 +3,9 @@ import startApp from "../helpers/start-app";
 
 var App;
 
-module("Acceptance - WAI ARIA", {
+['?blockStyle', ''].forEach(function (qp) {
+
+module("Acceptance - WAI ARIA" + qp, {
   setup: function () {
     App = startApp();
   },
@@ -14,7 +16,7 @@ module("Acceptance - WAI ARIA", {
 
 test("the select-menu label has the correct attributes", function () {
   expect(6);
-  visit("/");
+  visit("/" + qp);
   andThen(function () {
     var label = find("#favorite-cookie");
     equal(label.attr('role'), "button");
@@ -33,7 +35,7 @@ test("the select-menu label has the correct attributes", function () {
 
 test("the select-menu label has the correct attributes when disabled", function () {
   expect(1);
-  visit("/?disabled");
+  visit("/?disabled" + qp.replace('?', '&'));
   andThen(function () {
     var label = find("#favorite-cookie");
     equal(label.attr('aria-disabled'), "true");
@@ -42,7 +44,7 @@ test("the select-menu label has the correct attributes when disabled", function 
 
 test("the select-menu list has the correct attributes", function () {
   expect(6);
-  visit("/");
+  visit("/" + qp);
   andThen(function () {
     var list = find("ul");
     equal(list.attr('role'), "listbox");
@@ -61,7 +63,7 @@ test("the select-menu list has the correct attributes", function () {
 
 test("the select-menu list has the correct attributes when disabled", function () {
   expect(5);
-  visit("/?disabled&prompt=COOKIE");
+  visit("/?disabled&prompt=COOKIE" + qp.replace('?', '&'));
   andThen(function () {
     var list = find("ul");
     equal(list.attr('role'), "listbox");
@@ -75,7 +77,7 @@ test("the select-menu list has the correct attributes when disabled", function (
 
 test("the select-option has the correct attributes", function () {
   expect(10);
-  visit("/");
+  visit("/" + qp);
   andThen(function () {
     var chocolateChip = find("#choc-chip");
     equal(chocolateChip.attr('role'), "option");
@@ -103,7 +105,7 @@ test("the select-option has the correct attributes", function () {
 
 test("the select-option will be marked as disabled if it is", function () {
   expect(2);
-  visit("/?disabled=pb");
+  visit("/?disabled=pb" + qp.replace('?', '&'));
   andThen(function () {
     var chocolateChip = find("#choc-chip");
     equal(chocolateChip.attr('aria-disabled'), "false");
@@ -111,4 +113,6 @@ test("the select-option will be marked as disabled if it is", function () {
     var peanutButter = find("#pb");
     equal(peanutButter.attr('aria-disabled'), "true");
   });
+});
+
 });
