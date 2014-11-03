@@ -294,21 +294,32 @@ var SelectMenu = Ember.Component.extend({
         start = 0;
       }
 
-      var hasMatch = function (value) {
-        for (var i = 0; i < searchBy.length; i++) {
-          var searchValue = (searchBy[i] === 'this') ? value : get(value, searchBy[i]);
-          if (String(searchValue || '').toUpperCase().indexOf(search) === 0) {
-            return true;
+      var hasMatch;
+      var compare = function (a, b) {
+        return String(a || '').toUpperCase().indexOf(b) === 0;
+      };
+
+      // Search labels and values if the search-by is 'this'
+      if (searchBy[0] === 'this') {
+        hasMatch = function (value, label) {
+          return compare(value, search) || compare(label, search);
+        };
+      } else {
+        hasMatch = function (value) {
+          for (var i = 0; i < searchBy.length; i++) {
+            if (compare(get(value, searchBy[i], search) === 0) {
+              return true;
+            }
           }
-        }
-        return false;
+          return false;
+        };
       };
 
       // Search from the current value
       // for the next match
       for (var i = start; i < length; i++) {
         var option = options.objectAt(i);
-        match = hasMatch(get(option, 'value'));
+        match = hasMatch(get(option, 'value'), get(option, 'label'));
 
         // Break on the first match,
         // if a user would like to match
