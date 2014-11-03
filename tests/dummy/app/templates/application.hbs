@@ -9,9 +9,11 @@
   {{/select-menu}}
 {{else}}
   {{#select-menu id="favorite-cookie" value=favoriteCookie prompt=prompt disabled=isDisabled}}
-    {{#each this}}
-      {{select-option label=name id=id value=this disabled=disabled}}
-    {{/each}}
+    {{#select-group label="Cookies"}}
+      {{#each this}}
+        {{select-option label=name id=id value=this disabled=disabled}}
+      {{/each}}
+    {{/select-group}}
   {{/select-menu}}
 {{/if}}
 <div id="favorite">{{favoriteCookie.name}}</div>

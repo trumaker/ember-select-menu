@@ -50,18 +50,35 @@ html, body {
   max-height: 250px;
 }
 
-.select-option {
+.select-option,
+.select-group_label {
+  display: block;
   position: relative;
   -webkit-font-smoothing: subpixel-antialiased;
   user-select: none;
-  cursor: pointer;
 
   padding: 8px 30px 8px 8px;
   border-bottom: 1px solid #484848;
   white-space: nowrap;
+
   color: #999;
 }
 
+.select-group_label:after {
+  content: ' ';
+  display: block;
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid #484848;
+}
+
+.select-option {
+  cursor: pointer;
+}
+
+.select-group_label:last-child,
 .select-option:last-child {
   border-bottom: 0;
 }
@@ -82,5 +99,18 @@ html, body {
 }
 
 .select-option span {
+  padding-left: 30px;
+}
+
+.select-group {
+  color: #999;
+}
+
+.select-group ul {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.select-group .select-option {
   padding-left: 30px;
 }
