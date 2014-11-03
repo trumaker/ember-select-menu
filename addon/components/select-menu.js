@@ -307,13 +307,13 @@ var SelectMenu = Ember.Component.extend({
       } else {
         hasMatch = function (value) {
           for (var i = 0; i < searchBy.length; i++) {
-            if (compare(get(value, searchBy[i], search) === 0) {
+            if (compare(get(value, searchBy[i]), search) === 0) {
               return true;
             }
           }
           return false;
         };
-      };
+      }
 
       // Search from the current value
       // for the next match
