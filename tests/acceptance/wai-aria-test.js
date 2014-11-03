@@ -83,13 +83,21 @@ test("the select-option has the correct attributes", function () {
     equal(chocolateChip.attr('role'), "option");
     equal(chocolateChip.attr('aria-selected'), "true");
     equal(chocolateChip.attr('aria-disabled'), "false");
-    equal(chocolateChip.attr('aria-label'), "Chocolate Chip");
+    if (qp === "?blockStyle") {
+      equal(chocolateChip.attr('aria-label'), null);
+    } else {
+      equal(chocolateChip.attr('aria-label'), "Chocolate Chip");
+    }
 
     var peanutButter = find("#pb");
     equal(peanutButter.attr('role'), "option");
     equal(peanutButter.attr('aria-selected'), "false");
-    equal(chocolateChip.attr('aria-disabled'), "false");
-    equal(peanutButter.attr('aria-label'), "Peanut Butter");
+    equal(peanutButter.attr('aria-disabled'), "false");
+    if (qp === "?blockStyle") {
+      equal(peanutButter.attr('aria-label'), null);
+    } else {
+      equal(peanutButter.attr('aria-label'), "Peanut Butter");
+    }
   });
 
   click("#favorite-cookie");
