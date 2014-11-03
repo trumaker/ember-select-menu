@@ -1,4 +1,4 @@
-# ember-cli {{select-menu}}
+# ember-cli {{select-menu}} [![Build Status](https://travis-ci.org/paddle8/ember-select-menu.svg?branch=master)](https://travis-ci.org/paddle8/ember-select-menu)
 
 A simplified interface for custom select widgets. The handlebars is straightforward and easy to read:
 
