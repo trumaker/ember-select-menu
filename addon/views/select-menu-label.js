@@ -6,8 +6,12 @@ var get = Ember.get;
 var set = Ember.set;
 var reads = Ember.computed.reads;
 var not = Ember.computed.not;
+var bind = Ember.run.bind;
+var keys = Ember.keys;
 
 var scheduleOnce = Ember.run.scheduleOnce;
+
+var $ = Ember.$;
 
 var SelectMenuLabel = Ember.View.extend({
 
@@ -37,6 +41,34 @@ var SelectMenuLabel = Ember.View.extend({
   "aria-expanded": stringify("menu.isActive"),
 
   tabindex: 0,
+
+  /** @private
+    Attach events to labels that having a matching for attribute to this
+    select menu.
+   */
+  didInsertElement: function () {
+    var selector = "label[for='%@']".fmt(get(this, 'elementId'));
+    var eventManager = this._eventManager = {
+      mouseenter: bind(this, 'set', 'isHovering', true),
+      mouseleave: bind(this, 'set', 'isHovering', false)
+    };
+
+    keys(eventManager).forEach(function (event) {
+      $(document).on(event, selector, eventManager[event]);
+    });
+  },
+
+  /** @private
+    Cleanup event delegation.
+   */
+  willDestroyElement: function () {
+    var selector = "label[for='%@']".fmt(get(this, 'elementId'));
+    var eventManager = this._eventManager;
+
+    keys(eventManager).forEach(function (event) {
+      $(document).off(event, selector, eventManager[event]);
+    });
+  },
 
   blur: function () {
     set(this, 'isHovering', false);

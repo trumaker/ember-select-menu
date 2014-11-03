@@ -8,7 +8,6 @@ var next = Ember.run.next;
 var cancel = Ember.run.cancel;
 var later = Ember.run.later;
 var set = Ember.set;
-var bind = Ember.run.bind;
 
 var guidFor = Ember.guidFor;
 
@@ -17,8 +16,6 @@ var reads = Ember.computed.reads;
 var alias = Ember.computed.alias;
 
 var RSVP = Ember.RSVP;
-var $ = Ember.$;
-
 
 // Key code mappings
 var ESC              = 27,
@@ -125,27 +122,6 @@ var SelectMenu = Ember.Component.extend({
       this.notifyPropertyChange('value');
     }
   }.observes('options.[]', 'prompt').on('init'),
-
-  /** @private
-    Attach events to labels that having a matching for attribute to this
-    select menu.
-   */
-  didInsertElement: function () {
-    var label = get(this, 'label');
-    var selector = "label[for='%@']".fmt(get(label, 'elementId'));
-
-    $(document).on('mouseenter', selector, bind(label, 'set', 'isHovering', true));
-    $(document).on('mouseleave', selector, bind(label, 'set', 'isHovering', false));
-  },
-
-  /** @private
-    Cleanup event delegation.
-   */
-  willDestroyElement: function () {
-    var selector = "label[for='%@']".fmt(get(this, 'label.elementId'));
-    $(document).off('mouseenter', selector);
-    $(document).off('mouseleave', selector);
-  },
 
   /**
     Interpret keyboard events
