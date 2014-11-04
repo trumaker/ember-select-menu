@@ -338,3 +338,38 @@ test('it allows selection using up and down arrows', function() {
     start();
   });
 });
+
+test('it has an API for searching custom fields', function() {
+  expect(3);
+
+  // creates the component instance
+  var component = this.subject({
+    popup: {}
+  });
+  set(component, 'options', [{
+    value: "A",
+    search: "Q",
+    disabled: false
+  }, {
+    value: "B",
+    search: "X",
+    disabled: false
+  }, {
+    value: "C",
+    search: "Y",
+    disabled: false
+  }, {
+    value: "D",
+    search: "Z",
+    disabled: false
+  }]);
+  set(component, 'searchBy', "search");
+  deepEqual(get(component, 'searchBy'), ['search']);
+
+  type(component, 'Z');
+  equal(get(component, 'value'), "D");
+  component.resetSearch();
+
+  type(component, 'X');
+  equal(get(component, 'value'), "B");
+});
