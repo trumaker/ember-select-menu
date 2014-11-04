@@ -5,19 +5,120 @@ import {
 } from 'ember-qunit';
 
 var get = Ember.get;
-var defaultPrevented = false;
+var set = Ember.set;
+var RSVP = Ember.RSVP;
+var next = Ember.run.next;
+
 var type = function (component, text) {
   text.split('').forEach(function (chr) {
     keyDown(component, chr.charCodeAt(0));
   });
 };
 
+var defaultPrevented = false;
 var keyDown = function (component, keyCode) {
   defaultPrevented = false;
   component.keyDown({ which: keyCode, preventDefault: function () { defaultPrevented = true; } });
 };
 
 moduleForComponent('select-menu', 'SelectMenuComponent', {});
+
+test('it unwraps promises', function() {
+  expect(2);
+
+  // creates the component instance
+  var component = this.subject({
+    popup: {}
+  });
+  set(component, 'options', [{
+    value: "Chocolate Chip Walnut"
+  }, {
+    value: "Oatmeal Raisin Cookie"
+  }, {
+    value: "Dark Chocolate Chocolate Chip"
+  }, {
+    value: "Dark Chocolate Peanut Butter Chip"
+  }]);
+
+  var deferred = RSVP.defer();
+  set(component, 'value', deferred.promise);
+  equal(get(component, 'value'), deferred.promise);
+  deferred.resolve("Dark Chocolate Chocolate Chip");
+
+  stop();
+  deferred.promise.then(function () {
+    equal(get(component, 'value'), "Dark Chocolate Chocolate Chip");
+    start();
+  });
+});
+
+test('it selects the first option if the promise resolves to null', function() {
+  expect(2);
+
+  // creates the component instance
+  var component = this.subject({
+    popup: {}
+  });
+  set(component, 'options', [{
+    value: "Chocolate Chip Walnut"
+  }, {
+    value: "Oatmeal Raisin Cookie"
+  }, {
+    value: "Dark Chocolate Chocolate Chip"
+  }, {
+    value: "Dark Chocolate Peanut Butter Chip"
+  }]);
+
+  var deferred = RSVP.defer();
+  set(component, 'value', deferred.promise);
+  equal(get(component, 'value'), deferred.promise);
+  deferred.resolve(null);
+
+  stop();
+  deferred.promise.then(function () {
+    var d = RSVP.defer();
+    next(d, 'resolve');
+    return d.promise;
+  }).then(function () {
+    equal(get(component, 'value'), "Chocolate Chip Walnut");
+    start();
+  });
+});
+
+test('it selects nothing if the promise resolves to null and there is a prompt', function() {
+  expect(2);
+
+  // creates the component instance
+  var component = this.subject({
+    popup: {}
+  });
+  set(component, 'options', [{
+    value: "Chocolate Chip Walnut"
+  }, {
+    value: "Oatmeal Raisin Cookie"
+  }, {
+    value: "Dark Chocolate Chocolate Chip"
+  }, {
+    value: "Dark Chocolate Peanut Butter Chip"
+  }]);
+
+  var deferred = RSVP.defer();
+  set(component, 'value', deferred.promise);
+  equal(get(component, 'value'), deferred.promise);
+  deferred.resolve(null);
+
+  stop();
+  deferred.promise.then(function () {
+    var d = RSVP.defer();
+    set(component, 'prompt', "'ELLO");
+    next(d, 'resolve');
+    return d.promise;
+  }).then(function () {
+    equal(get(component, 'value'), null);
+    start();
+  });
+});
+
 
 test('it allows selection through typing', function() {
   expect(1);
@@ -26,7 +127,7 @@ test('it allows selection through typing', function() {
   var component = this.subject({
     popup: {}
   });
-  component.set('options', [{
+  set(component, 'options', [{
     value: "Chocolate Chip Walnut",
     disabled: false
   }, {
@@ -51,7 +152,7 @@ test('it continues from the current match when searching', function() {
   var component = this.subject({
     popup: {}
   });
-  component.set('options', [{
+  set(component, 'options', [{
     value: "Chocolate Chip Walnut",
     disabled: false
   }, {
@@ -78,7 +179,7 @@ test('it searches case insensitively', function() {
   var component = this.subject({
     popup: {}
   });
-  component.set('options', [{
+  set(component, 'options', [{
     value: "Chocolate Chip Walnut",
     disabled: false
   }, {
@@ -103,7 +204,7 @@ test('it handles backspaces', function() {
   var component = this.subject({
     popup: {}
   });
-  component.set('options', [{
+  set(component, 'options', [{
     value: "Chocolate Chip Walnut",
     disabled: false
   }, {
@@ -131,7 +232,7 @@ test('it resets the search string after 750ms', function() {
   var component = this.subject({
     popup: {}
   });
-  component.set('options', [{
+  set(component, 'options', [{
     value: "Chocolate Chip Walnut",
     disabled: false
   }, {
@@ -189,7 +290,7 @@ test('it allows selection using up and down arrows', function() {
   var component = this.subject({
     popup: {}
   });
-  component.set('options', [{
+  set(component, 'options', [{
     value: "A",
     disabled: false
   }, {

@@ -92,16 +92,12 @@ var SelectMenu = Ember.Component.extend({
     @default null
    */
   value: function (key, value) {
-    var hasPrompt = !!get(this, 'prompt');
-
-    if (hasPrompt) {
-      if (value && value.then) {
-        var menu = this;
-        RSVP.Promise.cast(value).then(function (unwrappedValue) {
-          if (menu.isDestroyed) { return; }
-          set(menu, 'value', unwrappedValue);
-        });
-      }
+    if (value && value.then) {
+      var menu = this;
+      RSVP.Promise.cast(value).then(function (unwrappedValue) {
+        if (menu.isDestroyed) { return; }
+        set(menu, 'value', unwrappedValue);
+      });
     } else if (value == null) {
       next(this, function () {
         if (this.isDestroyed || get(this, 'prompt')) { return; }
