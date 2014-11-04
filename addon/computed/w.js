@@ -16,6 +16,6 @@ export default function(defaultValue) {
     if (arguments.length > 1) {
       value = toArray(value);
     }
-    return value || toArray(value);
+    return value || toArray(defaultValue);
   });
 }

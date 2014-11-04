@@ -16,6 +16,14 @@ export default Ember.Route.extend({
       disabled: params.disabled === "oatmeal",
       name: "Oatmeal Raisin"
     }, {
+      id: "pb-chip",
+      disabled: params.disabled === "pb-chip",
+      name: "Dark Chocolate Peanut Butter Chip"
+    }, {
+      id: "dark-choc-chip",
+      disabled: params.disabled === "dark-choc-chip",
+      name: "Dark Chocolate Chocolate Chip"
+    }, {
       id: "pb",
       disabled: params.disabled === "pb",
       name: "Peanut Butter"
