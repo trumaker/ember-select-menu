@@ -2,6 +2,7 @@ import Ember from "ember";
 import SelectMenuLabel from "../views/select-menu-label";
 import nearestChild from "../computed/nearest-child";
 import w from "../computed/w";
+import { getLayout } from "dom-ruler";
 
 var get = Ember.get;
 var next = Ember.run.next;
@@ -16,6 +17,7 @@ var reads = Ember.computed.reads;
 var alias = Ember.computed.alias;
 
 var RSVP = Ember.RSVP;
+var $ = Ember.$;
 
 // Key code mappings
 var ESC              = 27,
@@ -338,7 +340,30 @@ var SelectMenu = Ember.Component.extend({
     this.__timer = null;
     this.__matchIndex = null;
     set(this, 'searchString', null);
-  }
+  },
+
+  scrollActiveDescendantIntoView: function () {
+    var activeDescendant = get(this, 'activeDescendant');
+
+    if (activeDescendant && get(this, 'isActive') && get(this, 'list')) {
+      var list = get(this, 'list');
+      var listBox = getLayout(get(this, 'list.element'));
+      var height = getLayout(get(this, 'popup.element')).padding.height;
+      var option = get(activeDescendant, 'element');
+      var scrollTop = list.$().scrollTop();
+      var scrollBottom = scrollTop + listBox.padding.height;
+
+      var optionTop = scrollTop + $(option).position().top;
+      var optionBottom = optionTop + getLayout(option).margins.height;
+
+      if (optionTop < scrollTop) {
+        list.$().scrollTop(optionTop - listBox.padding.top);
+      } else if (optionBottom > scrollBottom) {
+        list.$().scrollTop(optionBottom - height + listBox.padding.bottom);
+      }
+    }
+  }.observes('activeDescendant').on('init')
+
 });
 
 export default SelectMenu;

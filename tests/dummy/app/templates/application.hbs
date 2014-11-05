@@ -17,3 +17,9 @@
   {{/select-menu}}
 {{/if}}
 <div id="favorite">{{favoriteCookie.name}}</div>
+
+{{#select-menu id="alphabet"}}
+  {{#each alphabet}}
+    {{select-option id=this value=this label=this}}
+  {{/each}}
+{{/select-menu}}

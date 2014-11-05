@@ -9,5 +9,9 @@ export default Ember.ArrayController.extend({
   blockStyle: false,
   isDisabled: function () {
     return get(this, 'disabled') === 'true';
-  }.property('disabled')
+  }.property('disabled'),
+
+  alphabet: function () {
+    return 'abcdefghijklmnopqrstuvwxyz'.split('');
+  }.property()
 });
