@@ -1,6 +1,6 @@
 {
   "name": "ember-select-menu",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -31,7 +31,7 @@
     "glob": "^4.0.5"
   },
   "dependencies": {
-    "ember-popup-menu": "0.0.23"
+    "ember-popup-menu": "0.0.25"
   },
   "keywords": [
     "ember-addon"
