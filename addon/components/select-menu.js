@@ -260,7 +260,7 @@ var SelectMenu = Ember.Component.extend({
     Search by value of the object
    */
   "search-by": alias('searchBy'),
-  searchBy: w("value label"),
+  searchBy: w("label"),
 
   /**
     Locally iterate through options and find the
