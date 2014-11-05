@@ -5,7 +5,7 @@ var App;
 
 ['?blockStyle', ''].forEach(function (qp) {
 
-module("Acceptance - <label>" + qp, {
+module("Acceptance: <label>" + qp, {
   setup: function () {
     App = startApp();
   },

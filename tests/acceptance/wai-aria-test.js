@@ -5,7 +5,7 @@ var App;
 
 ['?blockStyle', ''].forEach(function (qp) {
 
-module("Acceptance - WAI ARIA" + qp, {
+module("Acceptance: WAI ARIA" + qp, {
   setup: function () {
     App = startApp();
   },

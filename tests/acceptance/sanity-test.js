@@ -5,7 +5,7 @@ var App;
 
 ['?blockStyle', ''].forEach(function (qp) {
 
-module("Acceptance - sanity" + qp, {
+module("Acceptance: sanity" + qp, {
   setup: function () {
     App = startApp();
   },
