@@ -11,6 +11,17 @@ var next = Ember.run.next;
 var later = Ember.run.later;
 var run = Ember.run;
 
+var mock = function () {
+  return {
+    activate: function () {
+      this.isActive = true;
+    },
+    deactivate: function () {
+      this.isActive = false;
+    }
+  };
+};
+
 var type = function (component, text) {
   text.split('').forEach(function (chr) {
     keyDown(component, chr.charCodeAt(0));
@@ -30,7 +41,7 @@ test('it unwraps promises', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
 
   var deferred = RSVP.defer();
@@ -63,7 +74,7 @@ test('it selects the first option if the promise resolves to null', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
 
   var deferred = RSVP.defer();
@@ -99,7 +110,7 @@ test('it selects nothing if the promise resolves to null and there is a prompt',
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   var deferred = RSVP.defer();
   run(function () {
@@ -137,7 +148,7 @@ test('it allows selection through typing', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'searchBy', ['value']);
@@ -165,7 +176,7 @@ test('it continues from the current match when searching', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'searchBy', ['value']);
@@ -196,7 +207,7 @@ test('it searches case insensitively', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'searchBy', ['value']);
@@ -225,7 +236,7 @@ test('it handles backspaces', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'searchBy', ['value']);
@@ -257,7 +268,7 @@ test('it resets the search string after 750ms', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'searchBy', ['value']);
@@ -292,7 +303,7 @@ test('it toggles whether the menu is active using spacebar', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   type(component, ' ');
   ok(get(component, 'isActive'));
@@ -305,7 +316,7 @@ test('it allows tabs to pass through', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   type(component, ' ');
   ok(get(component, 'isActive'));
@@ -319,7 +330,7 @@ test('it allows selection using up and down arrows', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'options', [{
@@ -377,7 +388,7 @@ test('it has an API for searching custom fields', function() {
 
   // creates the component instance
   var component = this.subject({
-    popup: {}
+    popup: mock()
   });
   run(function () {
     set(component, 'options', [{

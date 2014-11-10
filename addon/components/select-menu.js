@@ -82,6 +82,14 @@ var SelectMenu = Ember.Component.extend({
   list: nearestChild('select-menu-list'),
   popup: nearestChild('popup-menu'),
 
+  addTarget: function () {
+    next(this, function () {
+      get(this, 'popup').addTarget(get(this, 'label'), {
+        on: "click hold"
+      });
+    });
+  }.on('didInsertElement'),
+
   /**
     The item of the content that is currently selected.
 
@@ -127,6 +135,9 @@ var SelectMenu = Ember.Component.extend({
   keyDown: function (evt) {
     var code = (evt.keyCode ? evt.keyCode : evt.which);
     var search = get(this, 'searchString');
+    var label = get(this, 'label');
+    var popup = get(this, 'popup');
+    var isActive = get(this, 'isActive');
 
     // If the meta key was held, don't do anything.
     if (evt.metaKey) {
@@ -142,28 +153,28 @@ var SelectMenu = Ember.Component.extend({
 
     switch (code) {
     case UP:
-      if (get(this, 'isActive')) {
+      if (isActive) {
         this.selectPrevious();
       }
-      set(this, 'isActive', true);
+      popup.activate(label);
 
       break;
     case DOWN:
-      if (get(this, 'isActive')) {
+      if (isActive) {
         this.selectNext();
       }
-      set(this, 'isActive', true);
+      popup.activate(label);
 
       break;
     case ESC:
-      set(this, 'isActive', false);
+      popup.deactivate();
 
       break;
 
     // Allow tabs to pass through
     case TAB:
     case ENTER:
-      set(this, 'isActive', false);
+      popup.deactivate();
       return;
 
     // A whitelist of characters to let the browser handle
@@ -199,9 +210,13 @@ var SelectMenu = Ember.Component.extend({
         set(this, 'searchString', search + chr);
       } else {
         if (chr === ' ') {
-          this.toggleProperty('isActive');
+          if (isActive) {
+            popup.deactivate();
+          } else {
+            popup.activate(label);
+          }
         } else {
-          set(this, 'isActive', true);
+          popup.activate(label);
           set(this, 'searchString', chr);
         }
       }
