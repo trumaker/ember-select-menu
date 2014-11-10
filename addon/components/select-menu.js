@@ -1,7 +1,7 @@
 import Ember from "ember";
 import SelectMenuLabel from "../views/select-menu-label";
-import nearestChild from "../computed/nearest-child";
-import w from "../computed/w";
+import nearestChild from "ember-popup-menu/computed/nearest-child";
+import w from "ember-popup-menu/computed/w";
 import { getLayout } from "dom-ruler";
 
 var get = Ember.get;

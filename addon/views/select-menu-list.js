@@ -1,6 +1,6 @@
 import Ember from "ember";
-import nearestParent from "../computed/nearest-parent";
-import stringify from "../computed/stringify";
+import nearestParent from "ember-popup-menu/computed/nearest-parent";
+import stringify from "ember-popup-menu/computed/stringify";
 import ScrollSandbox from "../mixins/scroll_sandbox";
 
 var reads = Ember.computed.reads;
