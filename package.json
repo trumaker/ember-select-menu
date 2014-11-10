@@ -31,7 +31,7 @@
     "glob": "^4.0.5"
   },
   "dependencies": {
-    "ember-popup-menu": "^0.1.5"
+    "ember-popup-menu": "^0.1.7"
   },
   "keywords": [
     "ember-addon"

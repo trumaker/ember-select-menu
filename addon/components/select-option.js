@@ -44,7 +44,7 @@ var SelectOption = Ember.Component.extend({
 
     set(this, 'activeDescendant', this);
     set(this, 'selection', get(this, 'value'));
-    set(this, 'popup.isActive', false);
+    get(this, 'popup').deactivate();
   }
 
 });
