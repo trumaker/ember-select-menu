@@ -5,8 +5,8 @@ A simplified interface for custom select widgets. The handlebars is straightforw
 ```handlebars
 <label for="country">Where are you from?</label>
 {{#select-menu id="country" prompt="Select a country" value=country search-by="label code"}}
-  {{#each countries}}
-    {{select-option value=this label=name code=code}}
+  {{#each it in countries}}
+    {{select-option value=it label=it.name code=it.code}}
   {{/each}}
 {{/select-menu}}
 ```
