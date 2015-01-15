@@ -102,6 +102,8 @@ var SelectMenu = Ember.Component.extend({
     @default null
    */
   value: function (key, value) {
+    cancel(this._value$timer);
+
     if (value && value.then) {
       var menu = this;
       RSVP.Promise.cast(value).then(function (unwrappedValue) {
@@ -109,15 +111,16 @@ var SelectMenu = Ember.Component.extend({
         set(menu, 'value', unwrappedValue);
       });
     } else if (value == null) {
-      next(this, function () {
+      this._value$timer = next(this, function () {
         if (this.isDestroyed || get(this, 'prompt')) { return; }
         var firstOption = get(this, 'options.firstObject.value');
-        if (firstOption) {
+        if (firstOption && this._value$value == null) {
           set(this, 'value', firstOption);
         }
       });
     }
 
+    this._value$value = value;
     return value;
   }.property(),
 
