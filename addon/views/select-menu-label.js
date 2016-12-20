@@ -47,7 +47,7 @@ var SelectMenuLabel = Ember.View.extend({
     select menu.
    */
   didInsertElement: function () {
-    var selector = `label[for="${get(this, 'elementId')}"]`;
+    var selector = 'label[for="' + get(this, 'elementId') + '"]';
     var eventManager = this._eventManager = {
       mouseenter: bind(this, 'set', 'isHovering', true),
       mouseleave: bind(this, 'set', 'isHovering', false)
@@ -62,7 +62,7 @@ var SelectMenuLabel = Ember.View.extend({
     Cleanup event delegation.
    */
   willDestroyElement: function () {
-    var selector = `label[for="${get(this, 'elementId')}"]`;
+    var selector = 'label[for="' + get(this, 'elementId') + '"]';
     var eventManager = this._eventManager;
 
     keys(eventManager).forEach(function (event) {
